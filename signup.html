@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(90deg, #0f5c8c, #6d8bdd);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0a4970, #0b329d);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      width: 60px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav a {
+      background: #1e88c7;
+      padding: 8px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      font-size: 14px;
+    }
+
+    /* 🔥 أهم تعديل */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      width: 350px;
+      text-align: center;
+      color: black;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #1e88c7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    footer {
+      background: black;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">
+    <img src="images/logo.png" alt="logo">
+    <div>
+      <h2>Dr . Kerolus Edward</h2>
+      <p>Dental Clinic</p>
+    </div>
+  </div>
+
+  <nav>
+    <a href="home.HTML">Home</a>
+    <a href="notfication.html">Notification</a>
+    <a href="booking.html">Booking</a>
+    <a href="tracking.html">Tracking</a>
+  </nav>
+</header>
+
+<div class="container">
+
+  <div class="box">
+    <h2>Sign Up</h2>
+
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="text" id="phone" placeholder="Phone Number">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+
+    <button onclick="handleSignup()">Create Account</button>
+  </div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+import { getFirestore, doc, setDoc } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCn1VXJpWYlKohbwCkRMRi_qkBJUWDWt5g",
+  authDomain: "dkerolusedward.firebaseapp.com",
+  projectId: "dkerolusedward",
+  storageBucket: "dkerolusedward.firebasestorage.app",
+  messagingSenderId: "276983681544",
+  appId: "1:276983681544:web:cd1f76ae85c8407126f7bd",
+  measurementId: "G-JKSBQBH63N"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.handleSignup = async function() {
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    // 🔥 حفظ البيانات
+    await setDoc(doc(db, "users", user.uid), {
+      name: name,
+      phone: phone,
+      email: email
+    });
+
+    alert("Account Created ✅");
+
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+</script>
+
+<footer>
+  <p>© 2026 Dr. Kerolus Edward - Dental Clinic. All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
